@@ -10,7 +10,7 @@ const create = async (req, res) => {
       capacity
     } = req.body;
 
-    // 1️⃣ verificar espacio
+   
     const [space] = await dbCultural.query(
       'SELECT * FROM cultural_space WHERE id_space = ? AND state = "operativo"',
       [id_space]
@@ -22,12 +22,12 @@ const create = async (req, res) => {
 
     const capacityu = space[0].max_capacity;
 
-    // 2️⃣ capacidad
+    
     if (capacity > capacityu) {
       return res.status(400).json({ error: 'Aforo supera capacidad' });
     }
 
-    // 3️⃣ solapamiento
+   
     const [conflict] = await dbBooking.query(
       `SELECT * FROM booking 
        WHERE id_space = ? 
@@ -40,7 +40,7 @@ const create = async (req, res) => {
       return res.status(400).json({ error: 'Conflicto de horario' });
     }
 
-    // 4️⃣ insertar
+ 
     const [result] = await dbBooking.query(
       `INSERT INTO reserva 
       (id_space, organization, begin_date, end_date, capacity, state)
